@@ -17,9 +17,19 @@ const s3Client = new S3Client({
 
 const queries = {
     getAllTweets: async() => {
+        console.log("Before cached tweets")
         const cachedTweets = await redisClient.get(`ALL_TWEETS`)
         if(cachedTweets){
-            return cachedTweets
+            const parsedTweet = JSON.parse(cachedTweets);
+            const tweets: Tweet[] = parsedTweet.map((tweet: any) => ({
+                id: tweet.id,
+                content: tweet.content,
+                imageURL: tweet.imageURL,
+                authorId: tweet.authorId,
+                createdAt: new Date(tweet.createdAt),
+                updatedAt: new Date(tweet.updatedAt),
+              }));
+              return tweets;
         }
         const tweets = await prisma.tweet.findMany({orderBy: {createdAt: "desc"}});
         await redisClient.set(`ALL_TWEETS`,JSON.stringify(tweets));

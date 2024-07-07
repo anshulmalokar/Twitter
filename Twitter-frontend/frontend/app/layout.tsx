@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import GoogleOauthContainer from "@/Components/GoogleOauthContainer";
 import ReactQueryContainer from "@/Components/ReactQueryContainer";
 import "./globals.css";
+import TwitterLayout from "@/Layout/TwitterLayout";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,7 +21,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ReactQueryContainer>
-          <GoogleOauthContainer>{children}</GoogleOauthContainer>
+          <GoogleOauthContainer>
+            <TwitterLayout>{children}</TwitterLayout>
+          </GoogleOauthContainer>
         </ReactQueryContainer>
       </body>
     </html>

@@ -14,6 +14,7 @@ export default function GoogleLoginComponent({}: Props) {
 
   const handleLoginWithGoogle = useCallback(async (cred: CredentialResponse) => {
     const token = cred.credential;
+    console.log(cred);
     if(!token){
       return toast.error("Not a valid google token");
     }

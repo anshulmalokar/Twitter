@@ -1,11 +1,23 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import Image from "next/image";
 import { useCurrentUser } from "@/hooks/user";
 import { CiImageOn } from "react-icons/ci";
+import { useCreateTweet } from "@/hooks/tweet";
+import { CreateTweetData } from "@/gql/graphql";
 
 type Props = {};
 
 export default function InputCard({}: Props) {
+  const [content, setContent] = useState();
+  const { mutate } = useCreateTweet();
+
+  const doHandleCreateTweet = useCallback(() => {
+    const obj: CreateTweetData = {
+      content: content || "",
+    };
+    mutate(obj);
+  }, [content]);
+
   const handleSelectImage = useCallback(() => {
     const input = document.createElement("input");
     input.setAttribute("type", "file");
@@ -28,6 +40,8 @@ export default function InputCard({}: Props) {
       <div className="col-span-11 mt-2">
         <div className="flex flex-col">
           <textarea
+            value={content}
+            onChange={(e: any) => setContent(e.target.value)}
             className="bg-transparent overflow-y-hidden"
             name=""
             id=""
@@ -41,7 +55,12 @@ export default function InputCard({}: Props) {
               size={30}
               onClick={handleSelectImage}
             />
-            <button className="p-3 rounded-full bg-blue-600">Tweet</button>
+            <button
+              onClick={doHandleCreateTweet}
+              className="p-3 rounded-full bg-blue-600"
+            >
+              Tweet
+            </button>
           </div>
         </div>
       </div>
